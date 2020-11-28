@@ -8,61 +8,66 @@ import java.util.Stack;
 public class TopologicalSort {
     public static void main(String[] args) {
 
-        List<BGraph.Node> allnodes = new ArrayList<>();
+        List<Node<Character>> allnodes = new ArrayList<>();
 
-        BGraph.Node node1=new BGraph.Node(1);
-        BGraph.Node node2=new BGraph.Node(2);
-        BGraph.Node node3=new BGraph.Node(3);
-        BGraph.Node node4=new BGraph.Node(4);
-        BGraph.Node node5=new BGraph.Node(5);
+       Node nodeA = new Node('A');
+       Node nodeB = new Node('B');
+       Node nodeC = new Node('C');
+       Node nodeD = new Node('D');
+       Node nodeE = new Node('E');
+       Node nodeF= new Node('F');
+       Node nodeG= new Node('G');
 
-        node1.neighbours.add(node2);
-        node1.neighbours.add(node4);
+       nodeA.neighbours.add(nodeC);
+       nodeB.neighbours.add(nodeC);
+       nodeB.neighbours.add(nodeD);
 
-        node2.neighbours.add(node4);
-        node2.neighbours.add(node3);
-        node2.neighbours.add(node5);
+       nodeC.neighbours.add(nodeE);
 
-        node3.neighbours.add(node5);
+       nodeD.neighbours.add(nodeF);
+
+       nodeE.neighbours.add(nodeF);
+
+       nodeF.neighbours.add(nodeG);
+
+       allnodes.add(nodeA);
+       allnodes.add(nodeB);
+       allnodes.add(nodeC);
+       allnodes.add(nodeD);
+       allnodes.add(nodeE);
+       allnodes.add(nodeF);
+       allnodes.add(nodeG);
 
 
-        allnodes.add(node1);
-        allnodes.add(node2);
-        allnodes.add(node3);
-        allnodes.add(node4);
-        allnodes.add(node5);
 
-        HashMap<BGraph.Node,Boolean> visited = new HashMap<>();
-
-        for(BGraph.Node node : allnodes){
-            visited.put(node,false);
+        Stack<Node> stack = new Stack<>();
+        for(Node node:allnodes) {
+            ToppologicalSort(node, stack);
         }
+        while (!stack.isEmpty()){
+            System.out.print(stack.pop()+" ");
 
-        Stack<BGraph.Node> stack = new Stack<>();
-        topological(allnodes,stack,visited,node1);
-        System.out.println(stack.toString());
-        System.out.println(stack.peek());
-
+        }
     }
 
-    private static void topological(List<BGraph.Node> allnodes, Stack<BGraph.Node> stack, HashMap<BGraph.Node, Boolean> visited, BGraph.Node node1) {
+    private static void ToppologicalSort(Node nodeA, Stack<Node> stack) {
+        if(nodeA.status==0){
+            List<Node> list = nodeA.neighbours;
+            nodeA.status=1;
+            for(Node node:list){
+                if(node.status==0)
+                ToppologicalSort(node,stack);
 
-        if(!visited.get(node1)){
-            stack.push(node1);
-            visited.put(node1,true);
-            List<BGraph.Node> neighnbours = node1.neighbours;
-
-            for(BGraph.Node node: neighnbours){
-                topological(allnodes,stack,visited,node);
             }
+            stack.add(nodeA);
+            nodeA.status=2;
+
+
         }
 
 
 
-
-
-
-
-
     }
+
+
 }
